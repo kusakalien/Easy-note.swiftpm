@@ -5,13 +5,15 @@ struct Note: Identifiable, Codable, Sendable {
     var id: UUID
     var title: String
     var pages: [NotePage]
+    var background: PageBackground
     var createdAt: Date
     var updatedAt: Date
 
-    init(id: UUID = UUID(), title: String = "新しいノート", pages: [NotePage]? = nil, createdAt: Date = .now, updatedAt: Date = .now) {
+    init(id: UUID = UUID(), title: String = "新しいノート", pages: [NotePage]? = nil, background: PageBackground = .plain, createdAt: Date = .now, updatedAt: Date = .now) {
         self.id = id
         self.title = title
         self.pages = pages ?? [NotePage()]
+        self.background = background
         self.createdAt = createdAt
         self.updatedAt = updatedAt
     }

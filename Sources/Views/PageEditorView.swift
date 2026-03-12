@@ -6,6 +6,7 @@ struct PageEditorView: View {
     let noteID: UUID
     let pageID: UUID
     let pageNumber: Int
+    let background: PageBackground
     let onDelete: () -> Void
     let canDelete: Bool
     @Environment(NoteStore.self) private var store
@@ -39,8 +40,11 @@ struct PageEditorView: View {
 
             Divider()
 
-            CanvasView(drawing: $drawing) {
-                needsSave = true
+            ZStack {
+                BackgroundView(background: background)
+                CanvasView(drawing: $drawing) {
+                    needsSave = true
+                }
             }
         }
         .onAppear {

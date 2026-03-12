@@ -11,8 +11,8 @@ struct CanvasView: UIViewRepresentable {
         canvas.drawing = drawing
         canvas.delegate = context.coordinator
         canvas.drawingPolicy = .anyInput
-        canvas.backgroundColor = .systemBackground
-        canvas.isOpaque = true
+        canvas.backgroundColor = .clear
+        canvas.isOpaque = false
         // Scribble（手書き→テキスト変換）を無効化
         canvas.isRulerActive = false
         canvas.tool = PKInkingTool(.pen, color: .label, width: 5)

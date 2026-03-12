@@ -26,6 +26,24 @@ struct NoteDetailView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
+                        Menu {
+                            ForEach(PageBackground.allCases, id: \.self) { bg in
+                                Button {
+                                    var updated = note
+                                    updated.background = bg
+                                    store.update(updated)
+                                } label: {
+                                    Label(bg.label, systemImage: bg.icon)
+                                    if note.background == bg {
+                                        Image(systemName: "checkmark")
+                                    }
+                                }
+                            }
+                        } label: {
+                            Image(systemName: note.background.icon)
+                        }
+                    }
+                    ToolbarItem(placement: .topBarTrailing) {
                         Button {
                             titleDraft = note.title
                             editingTitle = true
@@ -116,6 +134,7 @@ struct NoteDetailView: View {
                 noteID: noteID,
                 pageID: selectedPageID,
                 pageNumber: pageIndex + 1,
+                background: note.background,
                 onDelete: {
                     pageToDelete = selectedPageID
                     showDeleteConfirm = true
