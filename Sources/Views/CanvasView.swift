@@ -13,10 +13,14 @@ struct CanvasView: UIViewRepresentable {
         canvas.drawingPolicy = .anyInput
         canvas.backgroundColor = .systemBackground
         canvas.isOpaque = true
+        // Scribble（手書き→テキスト変換）を無効化
+        canvas.isRulerActive = false
+        canvas.tool = PKInkingTool(.pen, color: .label, width: 5)
         // デフォルトのツールピッカーを表示
         let toolPicker = PKToolPicker()
         toolPicker.setVisible(true, forFirstResponder: canvas)
         toolPicker.addObserver(canvas)
+        toolPicker.showsDrawingPolicyControls = false
         context.coordinator.toolPicker = toolPicker
         canvas.becomeFirstResponder()
         return canvas
