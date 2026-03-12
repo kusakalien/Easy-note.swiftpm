@@ -22,7 +22,7 @@ let package = Package(
                 .portrait,
                 .landscapeRight,
                 .landscapeLeft,
-                .portraitUpsideDown(.when(googles: [.pad]))
+                .portraitUpsideDown(.when(deviceFamilies: [.pad]))
             ]
         )
     ],
