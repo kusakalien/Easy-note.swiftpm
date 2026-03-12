@@ -40,11 +40,8 @@ struct PageEditorView: View {
 
             Divider()
 
-            ZStack {
-                BackgroundView(background: background)
-                CanvasView(drawing: $drawing) {
-                    needsSave = true
-                }
+            CanvasView(drawing: $drawing, background: background) {
+                needsSave = true
             }
         }
         .onAppear {
