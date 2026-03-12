@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// ノート詳細画面 — ページのサムネイル一覧 + ページ編集
+/// ノート詳細画面 — ページのサムネイル一覧 + キャンバス編集
 struct NoteDetailView: View {
     let noteID: UUID
     @Environment(NoteStore.self) private var store
@@ -18,12 +18,8 @@ struct NoteDetailView: View {
         Group {
             if let note {
                 VStack(spacing: 0) {
-                    // サムネイル一覧
                     pageThumbnailStrip(note: note)
-
                     Divider()
-
-                    // 選択されたページの編集エリア
                     pageEditorArea(note: note)
                 }
                 .navigationTitle(note.title)
@@ -34,7 +30,7 @@ struct NoteDetailView: View {
                             titleDraft = note.title
                             editingTitle = true
                         } label: {
-                            Image(systemName: "pencil")
+                            Image(systemName: "character.cursor.ibeam")
                         }
                     }
                     ToolbarItem(placement: .topBarTrailing) {
@@ -58,7 +54,6 @@ struct NoteDetailView: View {
                     Button("削除", role: .destructive) {
                         if let pageToDelete {
                             store.deletePage(from: noteID, pageID: pageToDelete)
-                            // 削除後は先頭ページを選択
                             selectedPageID = store.notes.first(where: { $0.id == noteID })?.pages.first?.id
                         }
                     }
@@ -117,15 +112,9 @@ struct NoteDetailView: View {
     private func pageEditorArea(note: Note) -> some View {
         if let selectedPageID,
            let pageIndex = note.pages.firstIndex(where: { $0.id == selectedPageID }) {
-            let pageBinding = Binding<NotePage>(
-                get: { note.pages[pageIndex] },
-                set: { newValue in
-                    store.updatePage(in: noteID, page: newValue)
-                }
-            )
-
             PageEditorView(
-                page: pageBinding,
+                noteID: noteID,
+                pageID: selectedPageID,
                 pageNumber: pageIndex + 1,
                 onDelete: {
                     pageToDelete = selectedPageID

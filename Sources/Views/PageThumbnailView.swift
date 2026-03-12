@@ -1,25 +1,30 @@
 import SwiftUI
 
-/// ページのサムネイル表示
+/// ページのサムネイル表示（描画内容をプレビュー）
 struct PageThumbnailView: View {
     let page: NotePage
     let pageNumber: Int
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(page.preview)
-                .font(.caption2)
-                .foregroundStyle(.primary)
-                .lineLimit(4)
-                .frame(maxWidth: .infinity, alignment: .topLeading)
+        VStack(spacing: 4) {
+            let img = page.thumbnailImage(size: CGSize(width: 100, height: 110))
+            if img.size == .zero {
+                Image(systemName: "pencil.tip.crop.circle")
+                    .font(.largeTitle)
+                    .foregroundStyle(.quaternary)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else {
+                Image(uiImage: img)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
 
-            Spacer(minLength: 0)
-
-            Text("ページ \(pageNumber)")
+            Text("P.\(pageNumber)")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
         }
-        .padding(8)
+        .padding(6)
         .frame(width: 100, height: 130)
         .background(.regularMaterial, in: .rect(cornerRadius: 8))
         .overlay(

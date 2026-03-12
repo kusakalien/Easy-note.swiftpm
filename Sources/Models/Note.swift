@@ -15,9 +15,4 @@ struct Note: Identifiable, Codable, Sendable {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
     }
-
-    /// ノートのプレビューテキスト（最初のページの内容）
-    var preview: String {
-        pages.first?.preview ?? "空のノート"
-    }
 }

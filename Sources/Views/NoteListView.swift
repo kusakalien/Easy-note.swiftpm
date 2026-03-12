@@ -77,24 +77,39 @@ struct NoteListView: View {
     }
 
     private func noteRow(_ note: Note) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(note.title)
-                .font(.headline)
-                .lineLimit(1)
+        HStack(spacing: 12) {
+            // サムネイルプレビュー
+            let img = note.pages.first?.thumbnailImage(size: CGSize(width: 44, height: 44)) ?? UIImage()
+            if img.size == .zero {
+                RoundedRectangle(cornerRadius: 6)
+                    .fill(.quaternary)
+                    .frame(width: 44, height: 44)
+                    .overlay {
+                        Image(systemName: "pencil.tip")
+                            .foregroundStyle(.secondary)
+                    }
+            } else {
+                Image(uiImage: img)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 44, height: 44)
+                    .clipShape(.rect(cornerRadius: 6))
+            }
 
-            Text(note.preview)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .lineLimit(2)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(note.title)
+                    .font(.headline)
+                    .lineLimit(1)
 
-            HStack {
-                Text("\(note.pages.count) ページ")
-                    .font(.caption)
-                    .foregroundStyle(.tertiary)
-                Spacer()
-                Text(note.updatedAt, format: .dateTime.month().day().hour().minute())
-                    .font(.caption)
-                    .foregroundStyle(.tertiary)
+                HStack {
+                    Text("\(note.pages.count) ページ")
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                    Spacer()
+                    Text(note.updatedAt, format: .dateTime.month().day().hour().minute())
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                }
             }
         }
         .padding(.vertical, 4)
