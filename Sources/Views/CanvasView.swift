@@ -11,7 +11,7 @@ struct CanvasView: UIViewRepresentable {
         let canvas = PKCanvasView()
         canvas.drawing = drawing
         canvas.delegate = context.coordinator
-        canvas.drawingPolicy = .anyInput
+        canvas.drawingPolicy = .pencilOnly
         canvas.backgroundColor = .clear
         canvas.isOpaque = false
         // Scribble（手書き→テキスト変換）を無効化
