@@ -64,6 +64,12 @@ struct CanvasView: UIViewRepresentable {
             parent.drawing = canvasView.drawing
             parent.onChanged()
         }
+
+        func scrollViewDidZoom(_ scrollView: UIScrollView) {
+            guard let bgView = backgroundView else { return }
+            let scale = scrollView.zoomScale
+            bgView.transform = CGAffineTransform(scaleX: scale, y: scale)
+        }
     }
 }
 
@@ -79,6 +85,7 @@ final class BackgroundUIView: UIView {
         self.isOpaque = false
         self.backgroundColor = .clear
         self.isUserInteractionEnabled = false
+        self.layer.anchorPoint = .zero
     }
 
     @available(*, unavailable)
