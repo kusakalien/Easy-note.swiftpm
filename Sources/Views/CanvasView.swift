@@ -77,7 +77,6 @@ struct CanvasView: UIViewRepresentable {
 
 final class BackgroundUIView: UIView {
     var background: PageBackground
-    private let lineSpacing: CGFloat = 32
 
     init(background: PageBackground) {
         self.background = background
@@ -94,36 +93,31 @@ final class BackgroundUIView: UIView {
     }
 
     override func draw(_ rect: CGRect) {
+        guard background.style != .plain else { return }
         guard let ctx = UIGraphicsGetCurrentContext() else { return }
+        let spacing = background.lineSpacing
         let lineColor = UIColor.label.withAlphaComponent(0.1)
         ctx.setStrokeColor(lineColor.cgColor)
         ctx.setLineWidth(0.5)
 
-        switch background {
-        case .plain:
-            break
-        case .lined:
-            var y = lineSpacing
-            while y < rect.height {
-                ctx.move(to: CGPoint(x: 0, y: y))
-                ctx.addLine(to: CGPoint(x: rect.width, y: y))
-                y += lineSpacing
-            }
-            ctx.strokePath()
-        case .grid:
-            var y = lineSpacing
-            while y < rect.height {
-                ctx.move(to: CGPoint(x: 0, y: y))
-                ctx.addLine(to: CGPoint(x: rect.width, y: y))
-                y += lineSpacing
-            }
-            var x = lineSpacing
+        // 横線（罫線・方眼共通）
+        var y = spacing
+        while y < rect.height {
+            ctx.move(to: CGPoint(x: 0, y: y))
+            ctx.addLine(to: CGPoint(x: rect.width, y: y))
+            y += spacing
+        }
+
+        // 縦線（方眼のみ）
+        if background.style == .grid {
+            var x = spacing
             while x < rect.width {
                 ctx.move(to: CGPoint(x: x, y: 0))
                 ctx.addLine(to: CGPoint(x: x, y: rect.height))
-                x += lineSpacing
+                x += spacing
             }
-            ctx.strokePath()
         }
+
+        ctx.strokePath()
     }
 }

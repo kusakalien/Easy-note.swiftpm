@@ -27,17 +27,18 @@ struct NoteDetailView: View {
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
                         Menu {
-                            ForEach(PageBackground.allCases, id: \.self) { bg in
-                                Button {
-                                    var updated = note
-                                    updated.background = bg
-                                    store.update(updated)
-                                } label: {
-                                    Label(bg.label, systemImage: bg.icon)
-                                    if note.background == bg {
-                                        Image(systemName: "checkmark")
-                                    }
-                                }
+                            Section("無地") {
+                                backgroundButton(note: note, bg: .plain)
+                            }
+                            Section("罫線") {
+                                backgroundButton(note: note, bg: .linedSmall)
+                                backgroundButton(note: note, bg: .linedMedium)
+                                backgroundButton(note: note, bg: .linedLarge)
+                            }
+                            Section("方眼") {
+                                backgroundButton(note: note, bg: .gridSmall)
+                                backgroundButton(note: note, bg: .gridMedium)
+                                backgroundButton(note: note, bg: .gridLarge)
                             }
                         } label: {
                             Image(systemName: note.background.icon)
@@ -84,6 +85,22 @@ struct NoteDetailView: View {
                 }
             } else {
                 ContentUnavailableView("ノートが見つかりません", systemImage: "doc.questionmark")
+            }
+        }
+    }
+
+    private func backgroundButton(note: Note, bg: PageBackground) -> some View {
+        Button {
+            var updated = note
+            updated.background = bg
+            store.update(updated)
+        } label: {
+            HStack {
+                Text(bg.label)
+                if note.background == bg {
+                    Spacer()
+                    Image(systemName: "checkmark")
+                }
             }
         }
     }
